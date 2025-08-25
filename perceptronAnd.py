@@ -17,17 +17,15 @@ y = np.array([-1, -1, -1, 1])
 n = 0.1
 h=0
 
-
-
 # ---> Formulaciones del modelo <------
 
 # Definir los pesos iniciales 
-w = np.zeros(N+1)
+w = np.zeros([N+1])
 print("Pesos iniciales: ", w)
 
 #Definir el error 
 error = 1
-error_min = p*2
+error_min = (p*2)+2
 
 #Funcion para la activacion 
 def signo(h):
@@ -48,41 +46,46 @@ print("Salida deseada: ", y)
     
 # ---> Modelo de Perceptron <----
 i = 0
-while error >= 0 and i < COTA:
-    #Generar un indice al azar entre 0 y 3 (4 entradas) -> AUN NO GENERAR AL ASAR 
-    ## i_x = np.random.randint(0, p-1) 
-    i_x = x[i] 
-    i_y = y[i]
-    print("Iteracion: ", i_x)
-    print("Arreglo", i)
 
-    # Calcular la exitacion 
-    h = i_x @ w
-    print("Funcion exitacion")
-    print (h)
+while error > 0 and i < COTA:
 
-    #Calcular la activacion O = signo(h)
-    O = signo(h)
-    print("Salida del perceptron: ", O)
-    print("Salida esperada: ", i_y)
+    O_list = []
+    for j in range(p):
+        print("Iteracion: ", j)
+        idx = np.random.randint(0, p)  # Generar índice aleatorio entre 0 y p-1
+        i_x = x[idx]
+        print("Entradas: ", i_x)
+        i_y = y[idx]
+        print("Índice aleatorio: ", idx)
+        print("Arreglo", i)
+        h = i_x @ w
+        print("Funcion exitacion")
+        print(h)
 
-    # Calcular el ajuste de pesos para que O = y
-    print(y[i])
-    w_ajuste = (n * (i_y - O) * i_x)
-    print ("Ajuste de pesos resta: ", (i_y - O))
-    print("Ajuste de pesos: multiplicar",(i_y - O) * i_x )
-    
-    print("Ajuste de pesos: resultado " , (n * (i_y - O) * i_x))
-    print("Ajuste de pesos: ")
-    print(w_ajuste)
+        #Calcular la activacion O = signo(h)
+        O = signo(h)
+        O_list.append(O)
+        print("Salida del perceptron: ", O)
+        print("Salida esperada: ", y[j])
 
-    #Ajustar los pesos
-    w = w + w_ajuste
-    print("Pesos actualizados: ")
-    print(w)
-    
-    # Calcular el error
-    error = CalcularError(np.array(y), np.array(O))
+        # Calcular el ajuste de pesos para que O = y
+        w_ajuste = (n * (y[j] - O) * x[j])
+        print ("Ajuste de pesos resta: ", (y[j] - O))
+        print("Ajuste de pesos: multiplicar",(y[j] - O) * x[j] )
+        
+        print("Ajuste de pesos: resultado " , (n * (y[j] - O) * x[j]))
+        print("Ajuste de pesos: ")
+        print(w_ajuste)
+
+        #Ajustar los pesos
+        w = w + w_ajuste
+        print("Pesos actualizados: ")
+        print(w)
+        print("--------------------------------------------------")
+
+    # Calcular el error después de procesar todos los patrones
+    O_array = np.array(O_list)
+    error = CalcularError(np.array(y), O_array)
     print("Error: ", error)
 
     if error < error_min:
@@ -91,11 +94,5 @@ while error >= 0 and i < COTA:
         print("Error minimo actualizado: ", error_min)
         error_min_w = w
         print("Pesos para el error minimo: ", error_min_w)
-    print("--------------------------------------------------")
-
     i += 1
 print("Proceso terminado")
-print("Numero de iteraciones: ", i)
-
-    
-
