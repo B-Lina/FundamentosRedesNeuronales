@@ -20,7 +20,7 @@ Se trabajan conceptos como:
 - Actualización de pesos entre capas
 
 
-### 🔹 Red neuronal utilizando Keras
+### 🔹 Red neuronal Convolucional
 Implementación de una red neuronal empleando la librería **Keras** sobre **TensorFlow**.  
 Este enfoque permite:
 - Definir arquitecturas de forma sencilla
